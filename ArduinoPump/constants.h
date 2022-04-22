@@ -1,0 +1,10 @@
+#define CONNECTION_ERROR 1
+#define CONTROL_ERROR 2 //TODO: Look after correct error codes
+
+#define HEARTBEAT_IN_MS 120000
+
+#define SYSTEM_STATE_OFF 1
+#define SYSTEM_STATE_MAINTENANCE 2
+
+#define ARDUINO_NOT_REACHABLE_ERROR 1
+#define DATA_TO_OLD_DIF 3660000

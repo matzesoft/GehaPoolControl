@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "ArduinoPool"
+		},
+		{
+			"path": "ArduinoPump"
+		},
+		{
+			"path": "geha_pool_webapp"
+		}
+	],
+	"settings": {}
+}

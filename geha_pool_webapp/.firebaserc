@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "geha-pool-control"
+  },
+  "targets": {
+    "geha-pool-control": {
+      "hosting": {
+        "geha-pool": [
+          "geha-pool"
+        ],
+        "geha-pool-control": [
+          "geha-pool-control"
+        ]
+      }
+    }
+  }
+}

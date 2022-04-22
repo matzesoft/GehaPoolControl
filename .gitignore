@@ -1,0 +1,13 @@
+
+.vscode/
+
+# Project related
+/ProjectManagement
+
+# icons
+Icons/droplet.svg
+Icons/thermometer.svg
+Icons/Icons.gvdesign
+
+
+.DS_Store
