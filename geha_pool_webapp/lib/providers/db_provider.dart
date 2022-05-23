@@ -139,6 +139,7 @@ class PoolData {
       if (lastUpdate != null &&
           DateTime.now().difference(lastUpdate!).inHours > 1) {
         try {
+          _state = ArduinoPoolState.connectionError.index;
           await _dbRef.update({
             _ARPOOL_STATE_KEY: ArduinoPoolState.connectionError.index,
           });
@@ -202,6 +203,7 @@ class PumpData {
       final difference = DateTime.now().difference(lastUpdate!).inHours;
       if (lastUpdate != null && difference > 1) {
         try {
+          _state = ArduinoPoolState.connectionError.index;
           await _dbRef.update({
             _ARPUMP_STATE_KEY: ArduinoPumpState.connectionError.index,
           });
