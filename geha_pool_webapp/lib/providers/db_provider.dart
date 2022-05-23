@@ -134,7 +134,8 @@ class PoolData {
   }
 
   Future _checkOnOutdatedData() async {
-    if (state == null || (state != null && state!.index != 0)) {
+    if (state == null ||
+        (state != null && state! != ArduinoPoolState.connectionError)) {
       if (lastUpdate != null &&
           DateTime.now().difference(lastUpdate!).inHours > 1) {
         try {
@@ -196,7 +197,8 @@ class PumpData {
   }
 
   Future _checkOnOutdatedData() async {
-    if (state == null || (state != null && state!.index != 0)) {
+    if (state == null ||
+        (state != null && state! != ArduinoPumpState.connectionError)) {
       final difference = DateTime.now().difference(lastUpdate!).inHours;
       if (lastUpdate != null && difference > 1) {
         try {
