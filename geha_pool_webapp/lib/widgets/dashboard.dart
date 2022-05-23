@@ -50,7 +50,7 @@ class CardTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: Card(
         child: SizedBox(
           width: double.infinity,
@@ -215,7 +215,7 @@ class ErrorReadingData extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
               child: Icon(
-                EvaIcons.close,
+                EvaIcons.questionMarkCircleOutline,
                 color: Theme.of(context).errorColor,
               ),
             ),
