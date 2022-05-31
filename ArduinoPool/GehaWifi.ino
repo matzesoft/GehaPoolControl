@@ -23,7 +23,7 @@ int connectToWifi() {
   }
 
   if (status == WL_CONNECTED) {
-    Serial.print("You're connected to the network.");
+    Serial.println("You're connected to the network.");
     printWifiData();
   } else {
     Serial.println("Failed connecting to network!");
@@ -33,8 +33,6 @@ int connectToWifi() {
 }
 
 bool wifiIsConnected() {
-    Serial.print("Wifi Status: ");
-  Serial.println(WiFi.status());
   return (WiFi.status() == WL_CONNECTED);
 }
 
@@ -55,6 +53,8 @@ void printWifiData() {
   long rssi = WiFi.RSSI();
   Serial.print("signal strength (RSSI):");
   Serial.println(rssi);
+
+  Serial.println("");
 }
 
 

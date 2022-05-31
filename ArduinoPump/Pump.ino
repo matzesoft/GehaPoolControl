@@ -2,21 +2,21 @@
 
 void setupPump(void) {
   pinMode(PUMP_PIN, OUTPUT);
-  disablePump();
+  digitalWrite(PUMP_PIN, LOW);
 }
 
 void activatePump(void) {
+  Serial.println("Pump will be enabled.");
   digitalWrite(PUMP_PIN, HIGH);
   setPumpActive(true);
 }
 
 void disablePump(void) {
+  Serial.println("Pump will be disabled.");
   digitalWrite(PUMP_PIN, LOW);
   setPumpActive(false);
 }
 
 bool pumpIsActive(void) {
-  Serial.print("digitiakRead Pump pin: ");
-  Serial.println(digitalRead(PUMP_PIN));
   return (digitalRead(PUMP_PIN) == HIGH);
 }

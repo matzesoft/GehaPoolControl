@@ -53,6 +53,8 @@ void printWifiData() {
   long rssi = WiFi.RSSI();
   Serial.print("signal strength (RSSI):");
   Serial.println(rssi);
+
+  Serial.println("");
 }
 
 
