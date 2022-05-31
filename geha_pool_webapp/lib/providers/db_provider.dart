@@ -59,9 +59,6 @@ class DbProvider extends ChangeNotifier {
     reqTempData._setFromJSON(snapshotReqTemp.value);
     _systemState = _systemStateByInt(sysStateInt.value);
 
-    poolData._checkOnOutdatedData();
-    pumpData._checkOnOutdatedData();
-
     _init = true;
     notifyListeners();
 
@@ -98,11 +95,12 @@ String? _dateTimeFormatted(DateTime? date) {
   return DateFormat('dd.MM.yyyy kk:mm').format(date);
 }
 
+const _ARPOOL_LAST_CONNECTION_KEY = "last-connection";
 const _ARPOOL_LAST_UPDATE_KEY = "last-update";
 const _ARPOOL_STATE_KEY = "state";
 const _ARPOOL_TEMPERATURE_KEY = "temperature";
 
-enum ArduinoPoolState { noErrors, connectionError, failedReadTemp }
+enum ArduinoPoolState { noErrors, failedReadingSensor, failedSettingTemp }
 
 ArduinoPoolState? _arduinoPoolStateByInt(int? state) {
   if (state == null) return null;
@@ -114,6 +112,7 @@ class PoolData {
 
   DatabaseReference _dbRef;
   int? _lastUpdate;
+  int? _lastConnection;
   int? _state;
   double? _temperature;
 
@@ -125,29 +124,14 @@ class PoolData {
 
   ArduinoPoolState? get state => _arduinoPoolStateByInt(_state);
   DateTime? get lastUpdate => _dateTimeByIntTimestamp(_lastUpdate);
+  DateTime? get lastConnection => _dateTimeByIntTimestamp(_lastConnection);
   String? get lastUpdateFormatted => _dateTimeFormatted(lastUpdate);
 
   void _setFromJSON(Map<String, dynamic> json) {
     _lastUpdate = json[_ARPOOL_LAST_UPDATE_KEY];
+    _lastConnection = json[_ARPOOL_LAST_CONNECTION_KEY];
     _state = json[_ARPOOL_STATE_KEY];
     _temperature = json[_ARPOOL_TEMPERATURE_KEY];
-  }
-
-  Future _checkOnOutdatedData() async {
-    if (state == null ||
-        (state != null && state! != ArduinoPoolState.connectionError)) {
-      if (lastUpdate != null &&
-          DateTime.now().difference(lastUpdate!).inHours > 1) {
-        try {
-          _state = ArduinoPoolState.connectionError.index;
-          await _dbRef.update({
-            _ARPOOL_STATE_KEY: ArduinoPoolState.connectionError.index,
-          });
-        } catch (error) {
-          print(error);
-        }
-      }
-    }
   }
 
   void _onArduinoPoolUpdated(Event event) {
@@ -164,14 +148,12 @@ class PoolData {
   }
 }
 
+const _ARPUMP_LAST_CONNECTION_KEY = "last-connection";
 const _ARPUMP_LAST_UPDATE_KEY = "last-update";
 const _ARPUMP_STATE_KEY = "state";
 const _ARPUMP_ACTIVE_KEY = "active";
 
-enum ArduinoPumpState {
-  noErrors,
-  connectionError,
-}
+enum ArduinoPumpState { noErrors, failedReadingTemp, tempDataOutdated }
 
 ArduinoPumpState? _arduinoPumpStateByInt(int? state) {
   if (state == null) return null;
@@ -183,35 +165,21 @@ class PumpData {
 
   DatabaseReference _dbRef;
   int? _lastUpdate;
+  int? _lastConnection;
   int? _state;
   bool? _active;
 
   bool? get active => _active;
   ArduinoPumpState? get state => _arduinoPumpStateByInt(_state);
   DateTime? get lastUpdate => _dateTimeByIntTimestamp(_lastUpdate);
+  DateTime? get lastConnection => _dateTimeByIntTimestamp(_lastConnection);
   String? get lastUpdateFormatted => _dateTimeFormatted(lastUpdate);
 
   void _setFromJSON(Map<String, dynamic> json) {
     _lastUpdate = json[_ARPUMP_LAST_UPDATE_KEY];
+    _lastConnection = json[_ARPUMP_LAST_CONNECTION_KEY];
     _state = json[_ARPUMP_STATE_KEY];
     _active = json[_ARPUMP_ACTIVE_KEY];
-  }
-
-  Future _checkOnOutdatedData() async {
-    if (state == null ||
-        (state != null && state! != ArduinoPumpState.connectionError)) {
-      final difference = DateTime.now().difference(lastUpdate!).inHours;
-      if (lastUpdate != null && difference > 1) {
-        try {
-          _state = ArduinoPoolState.connectionError.index;
-          await _dbRef.update({
-            _ARPUMP_STATE_KEY: ArduinoPumpState.connectionError.index,
-          });
-        } catch (error) {
-          print(error);
-        }
-      }
-    }
   }
 
   void _onArduinoPumpUpdated(Event event) {

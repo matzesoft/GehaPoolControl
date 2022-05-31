@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:geha_pool_webapp/design/theme.dart';
 import 'package:geha_pool_webapp/providers/db_provider.dart';
 import 'package:geha_pool_webapp/strings.dart';
 import 'package:geha_pool_webapp/widgets/change_temperature.dart';
@@ -65,35 +66,42 @@ class Temperature extends StatelessWidget {
   Temperature(this.pool);
   final PoolData pool;
 
+  String get errorMessage {
+    if (pool.state == ArduinoPoolState.failedReadingSensor)
+      return Strings.failedReadingTempSensor;
+    if (pool.state == ArduinoPoolState.failedSettingTemp)
+      return Strings.failedSettingTemp;
+    return "";
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (pool.state == ArduinoPoolState.connectionError ||
-        pool.temperature == null)
-      return ErrorReadingData(Strings.errorReadingTempData);
-
     return CardTemplate(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                "${Strings.poolHasTemperature}${pool.temperatureRounded}°C",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline3,
-              ),
+        child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 12.0, bottom: 4.0),
+            child: Text(
+              "${Strings.poolHasTemperature}${pool.temperatureRounded}°C",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headline3,
             ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: pool.lastUpdate != null
-                  ? Text(Strings.lastUpdate + "${pool.lastUpdateFormatted}")
-                  : NoUpdatedData(),
-            ),
-          ],
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0, bottom: 12.0),
+            child: pool.lastUpdate != null
+                ? Text(Strings.lastUpdate + "${pool.lastUpdateFormatted}")
+                : NoUpdatedData(),
+          ),
+          ErrorBanner(
+            errorMessage,
+            currentError: pool.state != ArduinoPoolState.noErrors,
+          ),
+        ],
       ),
-    );
+    ));
   }
 }
 
@@ -106,11 +114,16 @@ class Pump extends StatelessWidget {
     return pump.active!;
   }
 
+  String get errorMessage {
+    if (pump.state == ArduinoPumpState.failedReadingTemp)
+      return Strings.failedReadingTemp;
+    if (pump.state == ArduinoPumpState.tempDataOutdated)
+      return Strings.tempDataOutdated;
+    return "";
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (pump.state == ArduinoPumpState.connectionError || pump.active == null)
-      return ErrorReadingData(Strings.errorReadingPumpData);
-
     return CardTemplate(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -137,6 +150,10 @@ class Pump extends StatelessWidget {
               child: pump.lastUpdate != null
                   ? Text(Strings.lastUpdate + "${pump.lastUpdateFormatted}")
                   : NoUpdatedData(),
+            ),
+            ErrorBanner(
+              errorMessage,
+              currentError: pump.state != ArduinoPumpState.noErrors,
             ),
           ],
         ),
@@ -200,35 +217,50 @@ class ReqTemp extends StatelessWidget {
   }
 }
 
-/// Shown when the Pool- or PumpArduino cannot read new enough data.
-class ErrorReadingData extends StatelessWidget {
-  ErrorReadingData(this.message);
-  final String message;
+class ErrorBanner extends StatelessWidget {
+  ErrorBanner(this.errorMessage, {this.currentError: true});
+
+  final bool currentError;
+  final String errorMessage;
 
   @override
   Widget build(BuildContext context) {
-    return CardTemplate(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
-              child: Icon(
-                EvaIcons.questionMarkCircleOutline,
-                color: Theme.of(context).errorColor,
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 350),
+      child: !currentError
+          ? SizedBox.shrink()
+          : Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Material(
+                color: Theme.of(context).canvasColor,
+                borderRadius: BorderRadius.circular(AppTheme.borderRadius),
+                child: Container(
+                  padding: EdgeInsets.all(4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Icon(
+                          EvaIcons.alertCircleOutline,
+                          color: Theme.of(context).errorColor,
+                        ),
+                      ),
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            errorMessage,
+                            maxLines: 3,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
-              child: Text(
-                message,
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

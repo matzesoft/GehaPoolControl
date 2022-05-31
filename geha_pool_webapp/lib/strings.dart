@@ -27,10 +27,15 @@ class Strings {
   static String get failedChangingReqTemp =>
       _STRINGS['failed_changing_reg_temp']!;
   static String get save => _STRINGS['save']!;
+  static String get failedReadingTempSensor =>
+      _STRINGS['failed_reading_temp_sensor']!;
+  static String get failedSettingTemp => _STRINGS['failed_setting_temp']!;
+  static String get failedReadingTemp => _STRINGS['failed_reading_temp']!;
+  static String get tempDataOutdated => _STRINGS['temp_data_outdated']!;
 }
 
 const _STRINGS = {
-  "pool_has_temperature": "Der Pool hat aktuell ",
+  "pool_has_temperature": "Der Pool hat ",
   "last_update": "Zuletzt aktualisiert: ",
   "error_reading_temp_data": "Keine aktuellen Temperatur-Daten lesbar.",
   "error_reading_pump_data": "Keine aktuellen Wärmepumpe-Daten lesbar.",
@@ -50,5 +55,14 @@ const _STRINGS = {
   "next": "Weiter",
   "save": "Speichern",
   "set_requested_temperature": "Stelle die Wunschtemperatur ein.",
-  "failed_changing_reg_temp": "Wunschtemperatur konnte nicht geändert werden :/"
+  "failed_changing_reg_temp":
+      "Wunschtemperatur konnte nicht geändert werden :/",
+  "failed_reading_temp_sensor":
+      "Aktuell können keine Temperaturwerte über den Sensor ausgelesen werden.",
+  "failed_setting_temp":
+      "Aktuell kann die Temperatur des Pools nicht aktualisiert werden.",
+  "failed_reading_temp":
+      "Aktuell gibt es einen Fehler beim Abrufen der Pooltemperatur.",
+  "temp_data_outdated":
+      "Aufgrund veralteter Temperaturdaten wurde die Pumpe deaktiviert.",
 };

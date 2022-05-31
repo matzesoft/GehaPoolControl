@@ -6,25 +6,21 @@ void setup() {
   setupErrorCode();
   setupTempSensor();
 
-  while (connectToWifi() < 0) {
-    setErrorCode(CONNECTION_ERROR);
-  }
-  while (setupFirebase() < 0) {
-    setErrorCode(CONNECTION_ERROR);
-  }
+  // TODO: Make clear on boot whats wrong
+  while (connectToWifi() < 0) {}
+  while (setupFirebase() < 0) {}
 }
 
 void loop() {
+  Serial.println("=== HEARTBEAT ===");
   while (!wifiIsConnected()) {
     connectToWifi();
-    setErrorCode(CONNECTION_ERROR);
   }
 
   if (getSystemState() == SYSTEM_STATE_OFF) {
     Serial.println("Pool control is deactivated by server.");
+    setArduinoPoolState(NO_ERRORS_STATE);
   } else {
-    checkArduinoPumpState();
-
     for (int i = 0; i < 5; i++) {
       float temp = getTempInC();
       if ((temp > TEMP_UNABLE_LOW) && (temp < TEMP_UNABLE_HIGH)) {
@@ -36,46 +32,31 @@ void loop() {
     }
   }
 
+  setLastConnection();
   delay(HEARTBEAT_IN_MS);
 }
 
 void onTempReadFailed(void) {
   Serial.println("Failed reading temperature.");
   removeOldestTemperature();
-  setErrorCode(FAILED_READ_TEMP);
-  setArduinoPoolState(FAILED_READ_TEMP);
+  setArduinoPoolState(FAILED_READ_SENSOR);
 }
 
 void onTempReadSucess(float temp) {
-  int arduinoPoolState = getArduinoPoolState();
-  if (arduinoPoolState > 0) {
-    setArduinoPoolState(0);
-  }
-
   setTemperature(temp);
   float finalTemp = getTemperature();
   Serial.print("Final pool temp: ");
   Serial.println(finalTemp);
   if (setPoolTemp(finalTemp) < 0) {
-    setErrorCode(CONNECTION_ERROR);
+    setErrorCode(FAILED_SET_TEMP);
+  } else {
+    setArduinoPoolState(NO_ERRORS_STATE);
   }
 }
 
-void checkArduinoPumpState(void) {
-  unsigned long long currentTimestamp = getCurrentTimestamp();
-  unsigned long long arduinoPumpLastUpdate = getArduinoPumpLastUpdate();
-
-  if (currentTimestamp > 0 && arduinoPumpLastUpdate > 0) {
-    int arduinoPumpState = getArduinoPumpState();
-
-    if ((currentTimestamp - arduinoPumpLastUpdate) > DATA_TO_OLD_DIF) {
-      if (arduinoPumpState != ARDUINO_NOT_REACHABLE_ERROR) {
-        setArduinoPumpState(ARDUINO_NOT_REACHABLE_ERROR);
-      }
-    } else {
-      if (arduinoPumpState == ARDUINO_NOT_REACHABLE_ERROR) {
-        setArduinoPumpState(0);
-      }
-    }
+void resetArduinoState() {
+  int arduinoPoolState = getArduinoPoolState();
+  if (arduinoPoolState > 0) {
+    
   }
 }
