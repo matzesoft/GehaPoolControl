@@ -33,6 +33,10 @@ double getRequestedTemperature(void) {
   return getTemperatureFromFB(requestedTemperaturePath + "temperature", -127.0);
 }
 
+unsigned long long getArduinoPoolLastConnection(void) {
+  return getTimestampFromFB(arduinoPoolPath + "last-connection");
+}
+
 unsigned long long getArduinoPoolLastUpdate(void) {
   return getTimestampFromFB(arduinoPoolPath + "last-update");
 }
@@ -95,6 +99,15 @@ int setPumpActive(bool value) {
 int setLastUpdate(void) {
   if (!Firebase.setTimestamp(firebaseData, arduinoPumpPath + "last-update")) {
     Serial.print("Unable to set pool temp timestamp. ");
+    Serial.println(firebaseData.errorReason());
+    return -1;
+  }
+  return 0;
+}
+
+int setLastConnection(void) {
+  if (!Firebase.setTimestamp(firebaseData, arduinoPumpPath + "last-connection")) {
+    Serial.print("Unable to set last connection timestamp. ");
     Serial.println(firebaseData.errorReason());
     return -1;
   }
