@@ -6,9 +6,12 @@ void setup() {
   setupErrorCode();
   setupTempSensor();
 
-  // TODO: Make clear on boot whats wrong
-  while (connectToWifi() < 0) {}
-  while (setupFirebase() < 0) {}
+  while (connectToWifi() < 0) {
+    setErrorCode(FAILED_CONNECTING_TO_WIFI);
+  }
+  while (setupFirebase() < 0) {
+    setErrorCode(FAILED_CONNECTING_TO_FIREBASE);
+  }
 }
 
 void loop() {
@@ -37,7 +40,7 @@ void loop() {
 }
 
 void onTempReadFailed(void) {
-  Serial.println("Failed reading temperature.");
+  Serial.println("Failed reading temperature sensor.");
   removeOldestTemperature();
   setArduinoPoolState(FAILED_READ_SENSOR);
 }

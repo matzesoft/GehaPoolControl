@@ -5,9 +5,12 @@ void setup() {
   setupErrorCode();
   setupPump();
 
-  // TODO: Make clear on boot whats wrong
-  while (connectToWifi() < 0) {}
-  while (setupFirebase() < 0) {}
+  while (connectToWifi() < 0) {
+    setErrorCode(FAILED_CONNECTING_TO_WIFI);
+  }
+  while (setupFirebase() < 0) {
+    setErrorCode(FAILED_CONNECTING_TO_FIREBASE);
+  }
 }
 
 void loop() {
@@ -33,6 +36,7 @@ void loop() {
 
       if (poolTemp <= -127.0 || requestedTemp <= -127.0) {
         Serial.println("Failed reading temperatures from server.");
+        disablePump();
         setArduinoPumpState(FAILED_READ_TEMP);
       } else {
         controlPump(poolTemp, requestedTemp);
