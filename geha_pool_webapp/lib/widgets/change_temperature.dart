@@ -150,43 +150,51 @@ class _LogInDialogState extends State<LogInDialog> {
       title: Text(Strings.logIn),
       content: ConstrainedBox(
         constraints: BoxConstraints(minWidth: 0, maxWidth: 350),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: TextField(
-                controller: email,
-                style: Theme.of(context).textTheme.bodyText2,
-                decoration: InputDecoration(labelText: Strings.email),
-                textInputAction: TextInputAction.next,
+        child: AutofillGroup(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: TextField(
+                  controller: email,
+                  style: Theme.of(context).textTheme.bodyText2,
+                  decoration: InputDecoration(labelText: Strings.email),
+                  textInputAction: TextInputAction.next,
+                  autofillHints: [AutofillHints.email],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: TextField(
-                controller: password,
-                style: Theme.of(context).textTheme.bodyText2,
-                decoration: InputDecoration(labelText: Strings.password),
-                obscureText: true,
-                onSubmitted: (_) => signIn(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: TextField(
+                  controller: password,
+                  style: Theme.of(context).textTheme.bodyText2,
+                  decoration: InputDecoration(labelText: Strings.password),
+                  obscureText: true,
+                  autofillHints: [AutofillHints.password],
+                  onSubmitted: (_) {
+                    signIn();
+                    
+                  },
+                ),
               ),
-            ),
-            AnimatedSwitcher(
-              duration: Duration(milliseconds: 200),
-              child: failedSignIn
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        Strings.logInFailed,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                              color: Theme.of(context).errorColor,
-                            ),
-                      ),
-                    )
-                  : SizedBox.shrink(),
-            ),
-          ],
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 200),
+                child: failedSignIn
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          Strings.logInFailed,
+                          style:
+                              Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    color: Theme.of(context).errorColor,
+                                  ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
+              ),
+            ],
+          ),
         ),
       ),
       actions: [
