@@ -14,8 +14,8 @@ class GehaPoolWebApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-    create: (context) => DbProvider(),
-    lazy: false,
+      create: (context) => DbProvider(),
+      lazy: false,
       child: ChangeNotifierProvider(
         create: (context) => UserProvider(),
         child: MaterialApp(
@@ -38,7 +38,7 @@ class AppConstraints extends StatelessWidget {
         child: SingleChildScrollView(
           child: Center(
             child: ConstrainedBox(
-              constraints: BoxConstraints(minWidth: 0, maxWidth: 750),
+              constraints: BoxConstraints(minWidth: 0, maxWidth: 650),
               child: Dashboard(),
             ),
           ),
