@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:geha_pool_webapp/design/theme.dart';
@@ -91,9 +93,7 @@ class Temperature extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 4.0, bottom: 12.0),
-            child: pool.lastUpdate != null
-                ? Text(Strings.lastUpdate + "${pool.lastUpdateFormatted}")
-                : NoUpdatedData(),
+            child: LastUpdateText(pool.lastUpdate),
           ),
           ErrorBanner(
             errorMessage,
@@ -147,9 +147,7 @@ class Pump extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 2.0, bottom: 12.0),
-              child: pump.lastUpdate != null
-                  ? Text(Strings.lastUpdate + "${pump.lastUpdateFormatted}")
-                  : NoUpdatedData(),
+              child: LastUpdateText(pump.lastUpdate),
             ),
             ErrorBanner(
               errorMessage,
@@ -217,6 +215,67 @@ class ReqTemp extends StatelessWidget {
   }
 }
 
+class LastUpdateText extends StatefulWidget {
+  LastUpdateText(this.lastUpdate);
+
+  final DateTime? lastUpdate;
+
+  @override
+  State<LastUpdateText> createState() => _LastUpdateTextState();
+}
+
+class _LastUpdateTextState extends State<LastUpdateText> {
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(Duration(seconds: 5), (_) => setState(() {}));
+  }
+
+  String get dateTimeDifferenceFormatted {
+    final difference = DateTime.now().difference(widget.lastUpdate!);
+    print(difference.inHours);
+    if (difference.inDays > 0) {
+      if (difference.inDays == 1) {
+        return "Vor über einem Tag";
+      } else {
+        return "Vor über ${difference.inDays} Tagen";
+      }
+    } else if (difference.inHours > 0) {
+      if (difference.inHours == 1) {
+        return "Vor über einer Stunde";
+      } else {
+        return "Vor über ${difference.inHours} Stunden";
+      }
+    } else if (difference.inMinutes > 0) {
+      if (difference.inMinutes == 1) {
+        return "Vor über einer Minute";
+      } else {
+        return "Vor über ${difference.inMinutes} Minuten";
+      }
+    } else {
+      return "Gerade eben";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.lastUpdate == null) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            EvaIcons.close,
+            color: Theme.of(context).errorColor,
+            size: 18,
+          ),
+          Text(Strings.lastUpdateUnknown),
+        ],
+      );
+    }
+    return Text(Strings.lastUpdate + dateTimeDifferenceFormatted);
+  }
+}
+
 class ErrorBanner extends StatelessWidget {
   ErrorBanner(this.errorMessage, {this.currentError: true});
 
@@ -261,24 +320,6 @@ class ErrorBanner extends StatelessWidget {
                 ),
               ),
             ),
-    );
-  }
-}
-
-/// Shown when the `last-update` value of the Pool- or PumpArduino is null.
-class NoUpdatedData extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          EvaIcons.close,
-          color: Theme.of(context).errorColor,
-          size: 18,
-        ),
-        Text(Strings.lastUpdateUnknown),
-      ],
     );
   }
 }
