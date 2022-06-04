@@ -174,7 +174,6 @@ class _LogInDialogState extends State<LogInDialog> {
                   autofillHints: [AutofillHints.password],
                   onSubmitted: (_) {
                     signIn();
-                    
                   },
                 ),
               ),

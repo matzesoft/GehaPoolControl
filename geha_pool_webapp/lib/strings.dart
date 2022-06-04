@@ -1,5 +1,5 @@
 class Strings {
-  static String get poolHasTemperature => _STRINGS['pool_has_temperature']!;
+  static String get poolTemperature => _STRINGS['pool_temperature']!;
   static String get lastUpdate => _STRINGS['last_update']!;
   static String get errorReadingTempData =>
       _STRINGS['error_reading_temp_data']!;
@@ -11,8 +11,7 @@ class Strings {
   static String get systemIsDisabled => _STRINGS['system_is_disabled']!;
   static String get systemIsInMaintenance =>
       _STRINGS['system_is_in_maintenance']!;
-  static String get requestedTemperatureIs =>
-      _STRINGS['requested_temperature_is']!;
+  static String get requestedTemperature => _STRINGS['requested_temperature']!;
   static String get noRequestedTemperature =>
       _STRINGS['no_requested_temperature']!;
   static String get changeTemperature => _STRINGS['change_temperature']!;
@@ -35,16 +34,16 @@ class Strings {
 }
 
 const _STRINGS = {
-  "pool_has_temperature": "Der Pool hat ",
+  "pool_temperature": "Pooltemperatur",
   "last_update": "Zuletzt aktualisiert: ",
   "error_reading_temp_data": "Keine aktuellen Temperatur-Daten lesbar.",
   "error_reading_pump_data": "Keine aktuellen Wärmepumpe-Daten lesbar.",
-  "pump_active": "Die Wärmepumpe ist aktiv.",
-  "pump_inactive": "Die Wärmepumpe ist inaktiv.",
+  "pump_active": "Wärmepumpe an",
+  "pump_inactive": "Wärmepumpe aus",
   "last_update_unknown": "Letzte Aktualisierung der Daten unbekannt.",
   "system_is_disabled": "Das System ist deaktiviert.",
   "system_is_in_maintenance": "Das System ist in Wartung.",
-  "requested_temperature_is": "Die Wunschtemperatur liegt bei ",
+  "requested_temperature": "Wunschtemperatur",
   "no_requested_temperature": "Keine Wunschtemperatur festgelegt.",
   "change_temperature": "Temperatur ändern",
   "log_in": "Anmelden",

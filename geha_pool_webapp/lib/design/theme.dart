@@ -111,6 +111,7 @@ class AppTheme {
             headline2: TextStyle(
               fontSize: 56,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[800],
             ),
             headline3: TextStyle(
               fontSize: 45,
@@ -252,9 +253,15 @@ class AppTheme {
         ),
         textTheme: GoogleFonts.rubikTextTheme(
           TextTheme(
-            headline2: const TextStyle(
+            headline1: TextStyle(
+              fontSize: 72,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey.shade100,
+            ),
+            headline2: TextStyle(
               fontSize: 56,
               fontWeight: FontWeight.w500,
+              color: Colors.grey.shade100,
             ),
             headline3: TextStyle(
               fontSize: 45,
