@@ -33,13 +33,16 @@ class _DashboardState extends State<Dashboard> {
           );
         }
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Temperature(fbProvider.poolData),
-            ReqTemp(fbProvider.reqTempData),
-            Pump(fbProvider.pumpData),
-          ],
+        return Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Temperature(fbProvider.poolData),
+              ReqTemp(fbProvider.reqTempData),
+              Pump(fbProvider.pumpData),
+            ],
+          ),
         );
       },
     );
@@ -261,7 +264,6 @@ class _LastUpdateTextState extends State<LastUpdateText> {
 
   String get dateTimeDifferenceFormatted {
     final difference = DateTime.now().difference(widget.lastUpdate!);
-    print(difference.inHours);
     if (difference.inDays > 0) {
       if (difference.inDays == 1) {
         return "Vor über einem Tag";

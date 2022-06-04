@@ -31,6 +31,8 @@ class GehaPoolWebApp extends StatelessWidget {
 }
 
 class AppConstraints extends StatelessWidget {
+  static const appMaxMobileWidth = 600.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +40,10 @@ class AppConstraints extends StatelessWidget {
         child: SingleChildScrollView(
           child: Center(
             child: ConstrainedBox(
-              constraints: BoxConstraints(minWidth: 0, maxWidth: 650),
+              constraints: BoxConstraints(
+                minWidth: 0,
+                maxWidth: appMaxMobileWidth,
+              ),
               child: Dashboard(),
             ),
           ),
