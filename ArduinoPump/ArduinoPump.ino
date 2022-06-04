@@ -3,7 +3,6 @@
 void setup() {
   Serial.begin(9600);
   setupErrorCode();
-  setupPump();
 
   while (connectToWifi() < 0) {
     setErrorCode(FAILED_CONNECTING_TO_WIFI);
@@ -11,6 +10,8 @@ void setup() {
   while (setupFirebase() < 0) {
     setErrorCode(FAILED_CONNECTING_TO_FIREBASE);
   }
+
+  setupPump();
 }
 
 void loop() {
@@ -56,15 +57,19 @@ void controlPump(double poolTemp, double requestedTemp) {
   Serial.print("requestedTemp: ");
   Serial.println(requestedTemp);
 
-  if (pumpIsActive()) {
+  if (pumpIsEnabled()) {
     Serial.println("Pump is active.");
     if ((requestedTemp + 1) <= poolTemp) {
       disablePump();
+    } else {
+      setLastUpdate();
     }
   } else {
     Serial.println("Pump is inactive.");
     if ((requestedTemp - 1) >= poolTemp) {
       activatePump();
+    } else {
+      setLastUpdate();
     }
   }
 }
