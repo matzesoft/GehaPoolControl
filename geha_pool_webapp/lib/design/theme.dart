@@ -29,7 +29,7 @@ class AppTheme {
           ),
         ),
         scaffoldBackgroundColor: Colors.grey.shade100,
-        canvasColor: Colors.grey[200],
+        canvasColor: Colors.grey.shade200,
         cursorColor: Color(0xFF428DFC),
         cardTheme: CardTheme(
           color: Colors.white,
@@ -39,7 +39,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
-        hoverColor: Colors.grey[50],
+        hoverColor: Colors.grey.shade50,
         iconTheme: IconThemeData(color: Colors.grey[500]),
         toggleableActiveColor: Color(0xFF428DFC),
         appBarTheme: AppBarTheme(
@@ -51,12 +51,12 @@ class AppTheme {
               fontFamily: 'Rubik',
             ),
           ),
-          iconTheme: IconThemeData(color: Colors.grey[500]),
-          color: Colors.grey[100],
+          iconTheme: IconThemeData(color: Colors.grey.shade500),
+          color: Colors.grey.shade100,
         ),
         tabBarTheme: TabBarTheme(
           labelColor: Color(0xFF428DFC),
-          unselectedLabelColor: Colors.grey[500],
+          unselectedLabelColor: Colors.grey.shade500,
           indicatorSize: TabBarIndicatorSize.tab,
         ),
         dialogTheme: DialogTheme(
@@ -102,8 +102,8 @@ class AppTheme {
           borderRadius: BorderRadius.circular(borderRadius),
           fillColor: Color(0xFF428DFC),
           selectedColor: Color(0xFF428DFC),
-          selectedBorderColor: Colors.grey[100],
-          borderColor: Colors.grey[100],
+          selectedBorderColor: Colors.grey.shade100,
+          borderColor: Colors.grey.shade100,
           borderWidth: 1.6,
         ),
         textTheme: GoogleFonts.rubikTextTheme(
@@ -111,54 +111,54 @@ class AppTheme {
             headline2: TextStyle(
               fontSize: 56,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[800],
+              color: Colors.grey.shade800,
             ),
             headline3: TextStyle(
               fontSize: 45,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[800],
+              color: Colors.grey.shade800,
             ),
             headline4: TextStyle(
               fontSize: 34,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[800],
+              color: Colors.grey.shade800,
             ),
             headline5: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[800],
+              color: Colors.grey.shade800,
             ),
             headline6: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[800],
+              color: Colors.grey.shade800,
             ),
             subtitle1: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[500],
+              color: Colors.grey.shade500,
             ),
             subtitle2: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[500],
+              color: Colors.grey.shade500,
             ),
             bodyText1: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[600],
+              color: Colors.grey.shade600,
             ),
             bodyText2: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[600],
+              color: Colors.grey.shade600,
             ),
             caption: TextStyle(fontSize: 12),
             button: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               letterSpacing: 1.2,
-              color: Colors.grey[700],
+              color: Colors.grey.shade700,
             ),
           ),
         ),
@@ -168,21 +168,21 @@ class AppTheme {
         brightness: Brightness.dark,
         primaryColorBrightness: Brightness.dark,
         primaryColor: Colors.black,
-        accentColor: Colors.blueAccent[100],
-        backgroundColor: Colors.grey[900],
+        accentColor: Colors.blueAccent.shade100,
+        backgroundColor: Colors.grey.shade900,
         scaffoldBackgroundColor: Colors.black,
-        canvasColor: Colors.grey[800],
-        cursorColor: Colors.blueAccent[100],
+        canvasColor: Colors.grey.shade800,
+        cursorColor: Colors.blueAccent.shade100,
         cardTheme: CardTheme(
-          color: Colors.grey[900],
+          color: Colors.grey.shade900,
           elevation: 12.0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
         hoverColor: Colors.grey[800],
-        iconTheme: IconThemeData(color: Colors.grey[400]),
-        toggleableActiveColor: Colors.blueAccent[100],
+        iconTheme: IconThemeData(color: Colors.grey.shade400),
+        toggleableActiveColor: Colors.blueAccent.shade100,
         buttonTheme: ButtonThemeData(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
@@ -191,16 +191,17 @@ class AppTheme {
         appBarTheme: AppBarTheme(
             textTheme: TextTheme(
               headline6: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                  fontFamily: 'Rubik'),
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+                fontFamily: 'Rubik',
+              ),
             ),
-            iconTheme: IconThemeData(color: Colors.grey[400]),
+            iconTheme: IconThemeData(color: Colors.grey.shade400),
             color: Colors.black),
         tabBarTheme: TabBarTheme(
-          labelColor: Colors.blueAccent[100],
-          unselectedLabelColor: Colors.grey[500],
+          labelColor: Colors.blueAccent.shade100,
+          unselectedLabelColor: Colors.grey.shade500,
           indicatorSize: TabBarIndicatorSize.tab,
         ),
         dialogTheme: DialogTheme(
@@ -236,28 +237,23 @@ class AppTheme {
           fillColor: Colors.grey.shade800,
           hintStyle: TextStyle(
             fontWeight: FontWeight.w400,
-            color: Colors.grey[600],
+            color: Colors.grey.shade600,
           ),
           labelStyle: TextStyle(
             fontWeight: FontWeight.w400,
-            color: Colors.grey[600],
+            color: Colors.grey.shade600,
           ),
         ),
         toggleButtonsTheme: ToggleButtonsThemeData(
           borderRadius: BorderRadius.circular(20),
-          fillColor: Colors.blueAccent[100],
-          selectedColor: Colors.blueAccent[100],
-          selectedBorderColor: Colors.grey[800],
+          fillColor: Colors.blueAccent.shade100,
+          selectedColor: Colors.blueAccent.shade100,
+          selectedBorderColor: Colors.grey.shade800,
           borderColor: Colors.grey.shade800.withOpacity(0.5),
           borderWidth: 1.6,
         ),
         textTheme: GoogleFonts.rubikTextTheme(
           TextTheme(
-            headline1: TextStyle(
-              fontSize: 72,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade100,
-            ),
             headline2: TextStyle(
               fontSize: 56,
               fontWeight: FontWeight.w500,
@@ -266,42 +262,42 @@ class AppTheme {
             headline3: TextStyle(
               fontSize: 45,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[100],
+              color: Colors.grey.shade100,
             ),
             headline4: TextStyle(
               fontSize: 34,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[100],
+              color: Colors.grey.shade100,
             ),
             headline5: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[100],
+              color: Colors.grey.shade100,
             ),
             headline6: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[100],
+              color: Colors.grey.shade100,
             ),
             subtitle1: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[400],
+              color: Colors.grey.shade100,
             ),
             subtitle2: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[400],
+              color: Colors.grey.shade400,
             ),
             bodyText1: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[300],
+              color: Colors.grey.shade300,
             ),
             bodyText2: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Colors.grey[300],
+              color: Colors.grey.shade300,
             ),
             caption: const TextStyle(fontSize: 12),
             button: const TextStyle(
