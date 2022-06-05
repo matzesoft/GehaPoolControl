@@ -8,17 +8,17 @@ void setupPump(void) {
 }
 
 void activatePump(void) {
-  Serial.println("Pump will be enabled.");
   digitalWrite(PUMP_PIN, HIGH);
   pumpEnabled = true;
   setPumpActive(true);
+  Serial.println("Pump is enabled.");
 }
 
 void disablePump(void) {
-  Serial.println("Pump will be disabled.");
   digitalWrite(PUMP_PIN, LOW);
   pumpEnabled = false;
   setPumpActive(false);
+  Serial.println("Pump is disabled.");
 }
 
 bool pumpIsEnabled(void) {

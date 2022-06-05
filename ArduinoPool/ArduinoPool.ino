@@ -18,6 +18,7 @@ void loop() {
   Serial.println("=== HEARTBEAT ===");
   while (!wifiIsConnected()) {
     connectToWifi();
+    setErrorCode(FAILED_CONNECTING_TO_WIFI);
   }
 
   if (getSystemState() == SYSTEM_STATE_OFF) {

@@ -11,6 +11,12 @@ String requestedTemperaturePath = "/requested-temperature/";
 
 int setupFirebase(void) {
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH, WIFI_SSID, WIFI_PASS);
+  Firebase.reconnectWiFi(true);
+  if (!Firebase.getJSON(firebaseData, "/")) {
+    Serial.println("Unable to connect to Firebase.");
+    return -1;
+  }
+  return 0;
 }
 
 int getSystemState(void) {

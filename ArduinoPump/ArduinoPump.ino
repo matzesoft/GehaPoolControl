@@ -18,6 +18,7 @@ void loop() {
   Serial.println("=== HEARTBEAT ===");
   while (!wifiIsConnected()) {
     connectToWifi();
+    setErrorCode(FAILED_CONNECTING_TO_WIFI);
   }
 
   if (getSystemState() == SYSTEM_STATE_OFF) {
@@ -58,18 +59,17 @@ void controlPump(double poolTemp, double requestedTemp) {
   Serial.println(requestedTemp);
 
   if (pumpIsEnabled()) {
-    Serial.println("Pump is active.");
     if ((requestedTemp + 1) <= poolTemp) {
       disablePump();
     } else {
-      setLastUpdate();
+      activatePump();
     }
   } else {
     Serial.println("Pump is inactive.");
     if ((requestedTemp - 1) >= poolTemp) {
       activatePump();
     } else {
-      setLastUpdate();
+      disablePump();
     }
   }
 }
