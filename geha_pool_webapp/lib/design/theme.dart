@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static Color customShadowColor(BuildContext context) {
@@ -35,6 +33,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
+        fontFamily: 'Rubik',
         hoverColor: Colors.grey.shade50,
         iconTheme: IconThemeData(color: Colors.grey[500]),
         toggleableActiveColor: Color(0xFF428DFC),
@@ -102,60 +101,58 @@ class AppTheme {
           borderColor: Colors.grey.shade100,
           borderWidth: 1.6,
         ),
-        textTheme: GoogleFonts.rubikTextTheme(
-          TextTheme(
-            headline2: TextStyle(
-              fontSize: 56,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade800,
-            ),
-            headline3: TextStyle(
-              fontSize: 45,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade800,
-            ),
-            headline4: TextStyle(
-              fontSize: 34,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade800,
-            ),
-            headline5: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade800,
-            ),
-            headline6: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade800,
-            ),
-            subtitle1: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade500,
-            ),
-            subtitle2: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade500,
-            ),
-            bodyText1: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade600,
-            ),
-            bodyText2: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade600,
-            ),
-            caption: TextStyle(fontSize: 12),
-            button: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 1.2,
-              color: Colors.grey.shade700,
-            ),
+        textTheme: TextTheme(
+          headline2: TextStyle(
+            fontSize: 56,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade800,
+          ),
+          headline3: TextStyle(
+            fontSize: 45,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade800,
+          ),
+          headline4: TextStyle(
+            fontSize: 34,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade800,
+          ),
+          headline5: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade800,
+          ),
+          headline6: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade800,
+          ),
+          subtitle1: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade500,
+          ),
+          subtitle2: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade500,
+          ),
+          bodyText1: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade600,
+          ),
+          bodyText2: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade600,
+          ),
+          caption: TextStyle(fontSize: 12),
+          button: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 1.2,
+            color: Colors.grey.shade700,
           ),
         ),
       );
@@ -175,6 +172,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
+        fontFamily: 'Rubik',
         hoverColor: Colors.grey[800],
         iconTheme: IconThemeData(color: Colors.grey.shade400),
         toggleableActiveColor: Colors.blueAccent.shade100,
@@ -247,59 +245,57 @@ class AppTheme {
           borderColor: Colors.grey.shade800.withOpacity(0.5),
           borderWidth: 1.6,
         ),
-        textTheme: GoogleFonts.rubikTextTheme(
-          TextTheme(
-            headline2: TextStyle(
-              fontSize: 56,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade100,
-            ),
-            headline3: TextStyle(
-              fontSize: 45,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade100,
-            ),
-            headline4: TextStyle(
-              fontSize: 34,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade100,
-            ),
-            headline5: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade100,
-            ),
-            headline6: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade100,
-            ),
-            subtitle1: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade100,
-            ),
-            subtitle2: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade400,
-            ),
-            bodyText1: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade300,
-            ),
-            bodyText2: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade300,
-            ),
-            caption: const TextStyle(fontSize: 12),
-            button: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 1.2,
-            ),
+        textTheme: TextTheme(
+          headline2: TextStyle(
+            fontSize: 56,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade100,
+          ),
+          headline3: TextStyle(
+            fontSize: 45,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade100,
+          ),
+          headline4: TextStyle(
+            fontSize: 34,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade100,
+          ),
+          headline5: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade100,
+          ),
+          headline6: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade100,
+          ),
+          subtitle1: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade100,
+          ),
+          subtitle2: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade400,
+          ),
+          bodyText1: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade300,
+          ),
+          bodyText2: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade300,
+          ),
+          caption: const TextStyle(fontSize: 12),
+          button: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 1.2,
           ),
         ),
       );

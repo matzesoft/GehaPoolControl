@@ -53,8 +53,8 @@ class DbProvider extends ChangeNotifier {
     final dbRefPool = databaseRef.child(_ARDUINO_POOL_PATH);
     final dbRefPump = databaseRef.child(_ARDUINO_PUMP_PATH);
     final dbRefReqTemp = databaseRef.child(_REQ_TEMP_PATH);
-    poolData = PoolData(dbRefPool);
-    pumpData = PumpData(dbRefPump);
+    poolData = PoolData();
+    pumpData = PumpData();
     reqTempData = ReqTempData(dbRefReqTemp);
 
     final snapshotPool = await dbRefPool.get();
@@ -121,9 +121,8 @@ ArduinoPoolState? _arduinoPoolStateByInt(int? state) {
 }
 
 class PoolData {
-  PoolData(this._dbRef);
+  PoolData();
 
-  DatabaseReference _dbRef;
   int? _lastUpdate;
   int? _lastConnection;
   int? _state;
@@ -174,9 +173,8 @@ ArduinoPumpState? _arduinoPumpStateByInt(int? state) {
 }
 
 class PumpData {
-  PumpData(this._dbRef);
+  PumpData();
 
-  DatabaseReference _dbRef;
   int? _lastUpdate;
   int? _lastConnection;
   int? _state;
