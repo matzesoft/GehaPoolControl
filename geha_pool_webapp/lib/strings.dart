@@ -31,6 +31,12 @@ class Strings {
   static String get failedSettingTemp => _STRINGS['failed_setting_temp']!;
   static String get failedReadingTemp => _STRINGS['failed_reading_temp']!;
   static String get tempDataOutdated => _STRINGS['temp_data_outdated']!;
+  static String get connectToServer => _STRINGS['connect_to_server']!;
+  static String get failedConnectingToServer =>
+      _STRINGS['failed_connecting_to_server']!;
+  static String get failedConnectingToServerDueTimeout =>
+      _STRINGS['failed_connecting_to_server_due_timeout']!;
+  static String get tryAgain => _STRINGS['try_again']!;
 }
 
 const _STRINGS = {
@@ -64,4 +70,9 @@ const _STRINGS = {
       "Aktuell gibt es einen Fehler beim Abrufen der Pooltemperatur.",
   "temp_data_outdated":
       "Aufgrund veralteter Temperaturdaten wurde die Pumpe deaktiviert.",
+  "connect_to_server": "Verbindung mit Server...",
+  "failed_connecting_to_server": "Verbindung mit Server fehlgeschlagen",
+  "failed_connecting_to_server_due_timeout":
+      "Zeitüberschreitung bei Verbindung mit Server",
+  "try_again": "Erneut versuchen"
 };

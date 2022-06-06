@@ -10,6 +10,13 @@ const _REQ_TEMP_PATH = "/requested-temperature/";
 const _SYSTEM_STATE_PATH = "/system-state/";
 const _SYSTEM_STATE_VAR_PATH = "/system-state/state/";
 
+enum AppState {
+  noErrors,
+  initalizing,
+  failedConnectingToServer,
+  timeoutServerConnection,
+}
+
 enum SystemState {
   noErrors,
   disabled,
@@ -26,21 +33,21 @@ class DbProvider extends ChangeNotifier {
     _setup();
   }
 
-  late final FirebaseApp _app;
   late final FirebaseDatabase _database;
   late final PoolData poolData;
   late final PumpData pumpData;
   late final ReqTempData reqTempData;
 
-  bool _init = false;
+  AppState _appState = AppState.initalizing;
   SystemState _systemState = SystemState.disabled;
 
-  bool get init => _init;
+  AppState get appState => _appState;
   SystemState get systemState => _systemState;
 
   Future _setup() async {
-    _app = await Firebase.initializeApp();
-    _database = FirebaseDatabase(app: _app);
+    await Firebase.initializeApp().then((fbApp) {
+      _database = FirebaseDatabase(app: fbApp);
+    });
 
     final databaseRef = _database.reference();
     final dbRefPool = databaseRef.child(_ARDUINO_POOL_PATH);
@@ -59,7 +66,7 @@ class DbProvider extends ChangeNotifier {
     reqTempData._setFromJSON(snapshotReqTemp.value);
     _systemState = _systemStateByInt(sysStateInt.value);
 
-    _init = true;
+    _appState = AppState.noErrors;
     notifyListeners();
 
     databaseRef.child(_ARDUINO_POOL_PATH).onChildChanged.listen((event) {
@@ -82,6 +89,12 @@ class DbProvider extends ChangeNotifier {
 
   void _onSystemStateUpdated(Event event) {
     _systemState = _systemStateByInt(event.snapshot.value);
+  }
+
+  void retrySetup() {
+    _appState = AppState.initalizing;
+    notifyListeners();
+    _setup();
   }
 }
 

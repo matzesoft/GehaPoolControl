@@ -7,7 +7,6 @@ import 'package:geha_pool_webapp/providers/db_provider.dart';
 import 'package:geha_pool_webapp/strings.dart';
 import 'package:geha_pool_webapp/widgets/change_temperature.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/foundation.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -19,20 +18,6 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Consumer<DbProvider>(
       builder: (context, fbProvider, child) {
-        if (!fbProvider.init) return CircularProgressIndicator();
-        if (fbProvider.systemState == SystemState.disabled) {
-          return SystemStateInform(
-            icon: EvaIcons.powerOutline,
-            message: Strings.systemIsDisabled,
-          );
-        }
-        if (fbProvider.systemState == SystemState.maintenance && kReleaseMode) {
-          return SystemStateInform(
-            icon: EvaIcons.options2Outline,
-            message: Strings.systemIsInMaintenance,
-          );
-        }
-
         return Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
@@ -356,37 +341,6 @@ class ErrorBanner extends StatelessWidget {
                 ),
               ),
             ),
-    );
-  }
-}
-
-class SystemStateInform extends StatelessWidget {
-  SystemStateInform({required this.icon, required this.message});
-  final IconData icon;
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(48.0),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
-            child: Icon(
-              icon,
-              color: Colors.blue,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
-            child: Text(
-              message,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

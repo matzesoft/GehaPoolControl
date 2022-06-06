@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geha_pool_webapp/design/theme.dart';
 import 'package:geha_pool_webapp/providers/db_provider.dart';
 import 'package:geha_pool_webapp/providers/user_provider.dart';
-import 'package:geha_pool_webapp/widgets/dashboard.dart';
+import 'package:geha_pool_webapp/widgets/app_setup.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -36,6 +36,7 @@ class AppConstraints extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ,
       body: Center(
         child: SingleChildScrollView(
           child: Center(
@@ -44,7 +45,7 @@ class AppConstraints extends StatelessWidget {
                 minWidth: 0,
                 maxWidth: appMaxMobileWidth,
               ),
-              child: Dashboard(),
+              child: AppStateHandler(),
             ),
           ),
         ),

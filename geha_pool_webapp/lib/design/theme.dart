@@ -19,7 +19,6 @@ class AppTheme {
 
   static ThemeData get lightTheme => ThemeData(
         brightness: Brightness.light,
-        primaryColorBrightness: Brightness.light,
         primaryColor: Colors.grey.shade100,
         accentColor: Color(0xFF428DFC),
         backgroundColor: Colors.white,
@@ -166,7 +165,6 @@ class AppTheme {
 
   static ThemeData get darkTheme => ThemeData(
         brightness: Brightness.dark,
-        primaryColorBrightness: Brightness.dark,
         primaryColor: Colors.black,
         accentColor: Colors.blueAccent.shade100,
         backgroundColor: Colors.grey.shade900,
