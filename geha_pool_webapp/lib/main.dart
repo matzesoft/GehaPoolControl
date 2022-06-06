@@ -36,7 +36,6 @@ class AppConstraints extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ,
       body: Center(
         child: SingleChildScrollView(
           child: Center(
