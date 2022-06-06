@@ -4,14 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static Color customShadowColor(BuildContext context) {
-    if (kIsWeb) {
-      if (Theme.of(context).brightness == Brightness.light) {
-        return Colors.grey.shade200;
-      } else {
-        return Colors.grey.shade800;
-      }
+    if (Theme.of(context).brightness == Brightness.light) {
+      return Colors.grey.shade200;
+    } else {
+      return Colors.grey.shade800;
     }
-    return Colors.grey.shade100.withOpacity(0.15);
   }
 
   static double get customElevation => 8.0;
