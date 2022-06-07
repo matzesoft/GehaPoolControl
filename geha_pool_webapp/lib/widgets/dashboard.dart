@@ -251,21 +251,21 @@ class _LastUpdateTextState extends State<LastUpdateText> {
     final difference = DateTime.now().difference(widget.lastUpdate!);
     if (difference.inDays > 0) {
       if (difference.inDays == 1) {
-        return "Vor über einem Tag";
+        return "Vor einem Tag";
       } else {
-        return "Vor über ${difference.inDays} Tagen";
+        return "Vor ${difference.inDays} Tagen";
       }
     } else if (difference.inHours > 0) {
       if (difference.inHours == 1) {
-        return "Vor über einer Stunde";
+        return "Vor einer Stunde";
       } else {
-        return "Vor über ${difference.inHours} Stunden";
+        return "Vor ${difference.inHours} Stunden";
       }
     } else if (difference.inMinutes > 0) {
       if (difference.inMinutes == 1) {
-        return "Vor über einer Minute";
+        return "Vor einer Minute";
       } else {
-        return "Vor über ${difference.inMinutes} Minuten";
+        return "Vor ${difference.inMinutes} Minuten";
       }
     } else {
       return "Gerade eben";
