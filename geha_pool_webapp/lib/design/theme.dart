@@ -14,7 +14,7 @@ class AppTheme {
 
   static ThemeData get lightTheme => ThemeData(
         brightness: Brightness.light,
-        primaryColor: Colors.grey.shade100,
+        primaryColor: const Color(0xFF030303),
         accentColor: Color(0xFF428DFC),
         backgroundColor: Colors.white,
         buttonTheme: ButtonThemeData(
@@ -159,9 +159,14 @@ class AppTheme {
 
   static ThemeData get darkTheme => ThemeData(
         brightness: Brightness.dark,
-        primaryColor: Colors.black,
+        primaryColor: const Color(0xFF030303),
         accentColor: Colors.blueAccent.shade100,
         backgroundColor: Colors.grey.shade900,
+        buttonTheme: ButtonThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+        ),
         scaffoldBackgroundColor: Colors.black,
         canvasColor: Colors.grey.shade800,
         cursorColor: Colors.blueAccent.shade100,
@@ -176,11 +181,6 @@ class AppTheme {
         hoverColor: Colors.grey[800],
         iconTheme: IconThemeData(color: Colors.grey.shade400),
         toggleableActiveColor: Colors.blueAccent.shade100,
-        buttonTheme: ButtonThemeData(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-        ),
         appBarTheme: AppBarTheme(
             textTheme: TextTheme(
               headline6: TextStyle(
