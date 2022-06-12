@@ -64,3 +64,6 @@ flutter:
         weight: 400
       - asset: fonts/Rubik-Medium.ttf
         weight: 500
+    - family: Roboto
+      fonts:
+        - asset: google_fonts/Roboto-Regular.ttf
