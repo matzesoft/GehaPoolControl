@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/widgets.dart';
@@ -14,7 +16,7 @@ enum AppState {
   noErrors,
   initalizing,
   failedConnectingToServer,
-  timeoutServerConnection,
+  timeoutServerConnection, // Currently not in use.
 }
 
 enum SystemState {
@@ -49,52 +51,60 @@ class DbProvider extends ChangeNotifier {
       _database = FirebaseDatabase(app: fbApp);
     });
 
-    final databaseRef = _database.reference();
-    final dbRefPool = databaseRef.child(_ARDUINO_POOL_PATH);
-    final dbRefPump = databaseRef.child(_ARDUINO_PUMP_PATH);
-    final dbRefReqTemp = databaseRef.child(_REQ_TEMP_PATH);
-    poolData = PoolData();
-    pumpData = PumpData();
-    reqTempData = ReqTempData(dbRefReqTemp);
+    await _loadInitalData();
+  }
 
-    final snapshotPool = await dbRefPool.get();
-    final snapshotPump = await dbRefPump.get();
-    final snapshotReqTemp = await dbRefReqTemp.get();
-    final sysStateInt = await databaseRef.child(_SYSTEM_STATE_VAR_PATH).get();
-    poolData._setFromJSON(snapshotPool.value);
-    pumpData._setFromJSON(snapshotPump.value);
-    reqTempData._setFromJSON(snapshotReqTemp.value);
-    _systemState = _systemStateByInt(sysStateInt.value);
+  Future _loadInitalData() async {
+    try {
+      final databaseRef = _database.reference();
+      final dbRefPool = databaseRef.child(_ARDUINO_POOL_PATH);
+      final dbRefPump = databaseRef.child(_ARDUINO_PUMP_PATH);
+      final dbRefReqTemp = databaseRef.child(_REQ_TEMP_PATH);
+      poolData = PoolData();
+      pumpData = PumpData();
+      reqTempData = ReqTempData(dbRefReqTemp);
 
-    _appState = AppState.noErrors;
+      final sysStateInt = await databaseRef.child(_SYSTEM_STATE_VAR_PATH).get();
+      final snapshotPool = await dbRefPool.get();
+      final snapshotPump = await dbRefPump.get();
+      final snapshotReqTemp = await dbRefReqTemp.get();
+      poolData._setFromJSON(snapshotPool.value);
+      pumpData._setFromJSON(snapshotPump.value);
+      reqTempData._setFromJSON(snapshotReqTemp.value);
+      _systemState = _systemStateByInt(sysStateInt.value);
+
+      databaseRef.child(_ARDUINO_POOL_PATH).onChildChanged.listen((event) {
+        poolData._onArduinoPoolUpdated(event);
+        notifyListeners();
+      });
+      databaseRef.child(_ARDUINO_PUMP_PATH).onChildChanged.listen((event) {
+        pumpData._onArduinoPumpUpdated(event);
+        notifyListeners();
+      });
+      databaseRef.child(_REQ_TEMP_PATH).onChildChanged.listen((event) {
+        reqTempData._onDbDataUpdated(event);
+        notifyListeners();
+      });
+      databaseRef.child(_SYSTEM_STATE_PATH).onChildChanged.listen((event) {
+        _onSystemStateUpdated(event);
+        notifyListeners();
+      });
+      _appState = AppState.noErrors;
+    } catch (error) {
+      _appState = AppState.failedConnectingToServer;
+    }
     notifyListeners();
-
-    databaseRef.child(_ARDUINO_POOL_PATH).onChildChanged.listen((event) {
-      poolData._onArduinoPoolUpdated(event);
-      notifyListeners();
-    });
-    databaseRef.child(_ARDUINO_PUMP_PATH).onChildChanged.listen((event) {
-      pumpData._onArduinoPumpUpdated(event);
-      notifyListeners();
-    });
-    databaseRef.child(_REQ_TEMP_PATH).onChildChanged.listen((event) {
-      reqTempData._onDbDataUpdated(event);
-      notifyListeners();
-    });
-    databaseRef.child(_SYSTEM_STATE_PATH).onChildChanged.listen((event) {
-      _onSystemStateUpdated(event);
-      notifyListeners();
-    });
   }
 
   void _onSystemStateUpdated(Event event) {
     _systemState = _systemStateByInt(event.snapshot.value);
   }
 
-  void retrySetup() {
+  Future retryLoadInitalData() async {
     _appState = AppState.initalizing;
     notifyListeners();
-    _setup();
+
+    await _loadInitalData();
   }
 }
 
@@ -113,7 +123,12 @@ const _ARPOOL_LAST_UPDATE_KEY = "last-update";
 const _ARPOOL_STATE_KEY = "state";
 const _ARPOOL_TEMPERATURE_KEY = "temperature";
 
-enum ArduinoPoolState { noErrors, failedReadingSensor, failedSettingTemp }
+enum ArduinoPoolState {
+  noErrors,
+  failedReadingSensor,
+  failedSettingTemp,
+  failedReadingSysState,
+}
 
 ArduinoPoolState? _arduinoPoolStateByInt(int? state) {
   if (state == null) return null;
@@ -165,7 +180,12 @@ const _ARPUMP_LAST_UPDATE_KEY = "last-update";
 const _ARPUMP_STATE_KEY = "state";
 const _ARPUMP_ACTIVE_KEY = "active";
 
-enum ArduinoPumpState { noErrors, failedReadingTemp, tempDataOutdated }
+enum ArduinoPumpState {
+  noErrors,
+  failedReadingTemp,
+  tempDataOutdated,
+  failedReadingSysState,
+}
 
 ArduinoPumpState? _arduinoPumpStateByInt(int? state) {
   if (state == null) return null;

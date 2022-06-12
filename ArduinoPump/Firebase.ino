@@ -19,6 +19,12 @@ int setupFirebase(void) {
   return 0;
 }
 
+int resetFirebase(void) {
+  firebaseData.clear();
+  firebaseData.end();
+  return setupFirebase();
+}
+
 int getSystemState(void) {
   return getIntFromFB(systemStatePath + "state", -1);
 }
@@ -91,9 +97,9 @@ unsigned long long getTimestampFromFB(String path) {
   }
 }
 
-int setPumpActive(bool value) {
+int setPumpOnOff(bool value) {
   if (!Firebase.setBool(firebaseData, arduinoPumpPath + "active", value)) {
-    Serial.print("Unable to set pump active: ");
+    Serial.print("Unable to set pump on/off: ");
     Serial.println(firebaseData.errorReason());
     return -1;
   } else if (!setLastUpdate()) {
@@ -123,15 +129,6 @@ int setLastConnection(void) {
 int setArduinoPumpState(int state) {
   if (!Firebase.setInt(firebaseData, arduinoPumpPath + "state", state)) {
     Serial.print("Unable to set Arduino state: ");
-    Serial.println(firebaseData.errorReason());
-    return -1;
-  }
-  return 0;
-}
-
-int setArduinoPoolState(int state) {
-  if (!Firebase.setInt(firebaseData, arduinoPoolPath + "state", state)) {
-    Serial.print("Unable to set ArduinoPool state: ");
     Serial.println(firebaseData.errorReason());
     return -1;
   }

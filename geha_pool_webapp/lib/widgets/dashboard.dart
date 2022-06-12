@@ -76,6 +76,8 @@ class Temperature extends StatelessWidget {
       return Strings.failedReadingTempSensor;
     if (pool.state == ArduinoPoolState.failedSettingTemp)
       return Strings.failedSettingTemp;
+    if (pool.state == ArduinoPoolState.failedReadingSysState)
+      return Strings.failedReadingSysStatePool;
     return "";
   }
 
@@ -190,6 +192,8 @@ class Pump extends StatelessWidget {
       return Strings.failedReadingTemp;
     if (pump.state == ArduinoPumpState.tempDataOutdated)
       return Strings.tempDataOutdated;
+    if (pump.state == ArduinoPumpState.failedReadingSysState)
+      return Strings.failedReadingSysStatePump;
     return "";
   }
 

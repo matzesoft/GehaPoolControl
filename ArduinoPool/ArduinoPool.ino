@@ -7,37 +7,72 @@ void setup() {
   setupTempSensor();
 
   while (connectToWifi() < 0) {
-    setErrorCode(FAILED_CONNECTING_TO_WIFI);
+    setErrorCode(FAILED_CONNECTING_TO_WIFI_LED_COUNT);
   }
   while (setupFirebase() < 0) {
-    setErrorCode(FAILED_CONNECTING_TO_FIREBASE);
+    setErrorCode(FAILED_CONNECTING_TO_FIREBASE_LED_COUNT);
   }
 }
 
 void loop() {
   Serial.println("=== HEARTBEAT ===");
-  while (!wifiIsConnected()) {
-    connectToWifi();
-    setErrorCode(FAILED_CONNECTING_TO_WIFI);
-  }
 
-  if (getSystemState() == SYSTEM_STATE_OFF) {
-    Serial.println("Pool control is deactivated by server.");
-    setArduinoPoolState(NO_ERRORS_STATE);
-  } else {
-    for (int i = 0; i < 5; i++) {
-      float temp = getTempInC();
-      if ((temp > TEMP_UNABLE_LOW) && (temp < TEMP_UNABLE_HIGH)) {
-        onTempReadSucess(temp);
-        break;
-      } else if (i >= 4) {
-        onTempReadFailed();
-      }
+  int connectToWifiTrys = 0;
+  while (!wifiIsConnected()) {
+    setErrorCode(FAILED_CONNECTING_TO_WIFI_LED_COUNT);
+
+    connectToWifiTrys += 1;
+    if (connectToWifiTrys > CONNECT_WIFI_TRYS_MAX) {
+      delay(10000);
+      reconnectToWifi();
+    } else {
+      connectToWifi();
     }
   }
 
-  setLastConnection();
-  delay(HEARTBEAT_IN_MS);
+
+  int systemState = getSystemState();
+  int rdSTrys = 1;
+  while (systemState < 0) {
+    delay(1500 * rdSTrys);
+
+    systemState = getSystemState();
+    Serial.print("System state: ");
+    Serial.println(systemState);
+    if (systemState >= 0) break;
+    rdSTrys += 1;
+
+    if (rdSTrys > READ_SYSTEM_STATE_TRYS_MAX) {
+      Serial.println("'Read system state' max reached. Try reconnecting to Wifi...");
+      setArduinoPoolState(FAILED_READ_SYSTEM_STATE);
+
+      if (reconnectToWifi() < 0) {
+        Serial.println("Failed reconnecting to Wifi!");
+      } else {
+        Serial.println("Reconnecting to Wifi sucessfull.");
+      }
+      break;
+    }
+  }
+
+  if (systemState >= 0) {
+    if (systemState == SYSTEM_STATE_OFF) {
+      Serial.println("Pool control is deactivated by server.");
+      setArduinoPoolState(NO_ERRORS_STATE);
+    } else if (systemState == SYSTEM_STATE_NO_ERRORS) {
+      for (int i = 0; i < 5; i++) {
+        float temp = getTempInC();
+        if ((temp > TEMP_UNABLE_LOW) && (temp < TEMP_UNABLE_HIGH)) {
+          onTempReadSucess(temp);
+          break;
+        } else if (i >= 4) {
+          onTempReadFailed();
+        }
+      }
+    }
+    setLastConnection();
+    delay(HEARTBEAT_IN_MS);
+  }
 }
 
 void onTempReadFailed(void) {
@@ -52,15 +87,8 @@ void onTempReadSucess(float temp) {
   Serial.print("Final pool temp: ");
   Serial.println(finalTemp);
   if (setPoolTemp(finalTemp) < 0) {
-    setErrorCode(FAILED_SET_TEMP);
+    setArduinoPoolState(FAILED_SET_TEMP);
   } else {
     setArduinoPoolState(NO_ERRORS_STATE);
-  }
-}
-
-void resetArduinoState() {
-  int arduinoPoolState = getArduinoPoolState();
-  if (arduinoPoolState > 0) {
-    
   }
 }

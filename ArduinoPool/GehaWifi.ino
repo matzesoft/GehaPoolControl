@@ -4,7 +4,6 @@
 #include "secrets.h"
 char ssid[] = WIFI_SSID;
 char pass[] = WIFI_PASS;
-int status = WL_IDLE_STATUS;
 
 int connectToWifi() {
   if (WiFi.status() == WL_NO_MODULE) {
@@ -14,15 +13,13 @@ int connectToWifi() {
 
   Serial.print("Attempting to connect to WPA SSID: ");
   Serial.println(ssid);
-  for (int i = 0; i < 8; i++) {
-    status = WiFi.begin(ssid, pass);
-    if (status == WL_CONNECTED) {
-      break;
-    }
-    delay(1000);
+  for (int i = 0; i < 3; i++) {
+    WiFi.begin(ssid, pass);
+    if (wifiIsConnected()) break;
   }
 
-  if (status == WL_CONNECTED) {
+  if (wifiIsConnected()) {
+    WiFi.lowPowerMode();
     Serial.println("You're connected to the network.");
     printWifiData();
   } else {
@@ -34,6 +31,11 @@ int connectToWifi() {
 
 bool wifiIsConnected() {
   return (WiFi.status() == WL_CONNECTED);
+}
+
+int reconnectToWifi() {
+  WiFi.end();
+  return connectToWifi();
 }
 
 void printWifiData() {

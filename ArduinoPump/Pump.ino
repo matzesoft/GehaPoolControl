@@ -10,14 +10,14 @@ void setupPump(void) {
 void activatePump(void) {
   digitalWrite(PUMP_PIN, HIGH);
   pumpEnabled = true;
-  setPumpActive(true);
+  setPumpOnOff(true);
   Serial.println("Pump is enabled.");
 }
 
 void disablePump(void) {
   digitalWrite(PUMP_PIN, LOW);
   pumpEnabled = false;
-  setPumpActive(false);
+  setPumpOnOff(false);
   Serial.println("Pump is disabled.");
 }
 

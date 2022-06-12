@@ -5,7 +5,6 @@
 FirebaseData firebaseData;
 
 String arduinoPoolPath = "/arduino-pool/";
-String arduinoPumpPath = "/arduino-pump/";
 String systemStatePath = "/system-state/";
 
 int setupFirebase(void) {
@@ -18,20 +17,18 @@ int setupFirebase(void) {
   return 0;
 }
 
+int resetFirebase(void) {
+  firebaseData.clear();
+  firebaseData.end();
+  return setupFirebase();
+}
+
 int getSystemState(void) {
   return getInt(systemStatePath + "state", -1);
 }
 
 int getArduinoPoolState(void) {
   return getInt(arduinoPoolPath + "state", -1);
-}
-
-int getArduinoPumpState(void) {
-  return getInt(arduinoPumpPath + "state", -1);
-}
-
-unsigned long long getArduinoPumpLastConnection(void) {
-  return getTimestamp(arduinoPumpPath + "last-connection");
 }
 
 unsigned long long getCurrentTimestamp(void) {
@@ -72,7 +69,7 @@ int setPoolTemp(float value) {
     Serial.print("Unable to set pool temperature: ");
     Serial.println(firebaseData.errorReason());
     return -1;
-  } else if (!setLastUpdate()) {
+  } else if (setLastUpdate() < 0) {
     return -1;
   }
   return 0;
@@ -99,15 +96,6 @@ int setLastConnection(void) {
 int setArduinoPoolState(int state) {
   if (!Firebase.setInt(firebaseData, arduinoPoolPath + "state", state)) {
     Serial.print("Unable to set ArduinoPool state: ");
-    Serial.println(firebaseData.errorReason());
-    return -1;
-  }
-  return 0;
-}
-
-int setArduinoPumpState(int state) {
-  if (!Firebase.setInt(firebaseData, arduinoPumpPath + "state", state)) {
-    Serial.print("Unable to set ArduinoPump state: ");
     Serial.println(firebaseData.errorReason());
     return -1;
   }

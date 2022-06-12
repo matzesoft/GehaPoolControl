@@ -29,15 +29,15 @@ class AppStateHandler extends StatelessWidget {
           return AppStateError(
             icon: EvaIcons.hardDriveOutline,
             message: Strings.failedConnectingToServer,
-            onPressed:
-                Provider.of<DbProvider>(context, listen: false).retrySetup,
+            onPressed: () => Provider.of<DbProvider>(context, listen: false)
+                .retryLoadInitalData(),
           );
         } else if (appState == AppState.timeoutServerConnection) {
           return AppStateError(
             icon: EvaIcons.clockOutline,
             message: Strings.failedConnectingToServerDueTimeout,
-            onPressed:
-                Provider.of<DbProvider>(context, listen: false).retrySetup,
+            onPressed: () => Provider.of<DbProvider>(context, listen: false)
+                .retryLoadInitalData(),
           );
         }
         return SystemStateHandler();

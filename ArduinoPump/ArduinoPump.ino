@@ -5,10 +5,10 @@ void setup() {
   setupErrorCode();
 
   while (connectToWifi() < 0) {
-    setErrorCode(FAILED_CONNECTING_TO_WIFI);
+    setErrorCode(FAILED_CONNECTING_TO_WIFI_LED_COUNT);
   }
   while (setupFirebase() < 0) {
-    setErrorCode(FAILED_CONNECTING_TO_FIREBASE);
+    setErrorCode(FAILED_CONNECTING_TO_FIREBASE_LED_COUNT);
   }
 
   setupPump();
@@ -19,43 +19,76 @@ void loop() {
 
   int connectToWifiTrys = 0;
   while (!wifiIsConnected()) {
-    setErrorCode(FAILED_CONNECTING_TO_WIFI);
+    setErrorCode(FAILED_CONNECTING_TO_WIFI_LED_COUNT);
+
     connectToWifiTrys += 1;
-    if (connectToWifiTrys > FAILED_CONNECT_WIFI_TRYS_MAX) {
+    if (connectToWifiTrys == CONNECT_WIFI_TRYS_MAX) {
+      Serial.println("'Connect to wifi' max reached.");
       disablePump();
     }
-    
-    connectToWifi();
+
+    if (connectToWifiTrys > CONNECT_WIFI_TRYS_MAX) {
+      delay(10000);
+      reconnectToWifi();
+    } else {
+      connectToWifi();
+    }
   }
 
-  if (getSystemState() == SYSTEM_STATE_OFF) {
-    Serial.println("Pool control is system-wide off.");
-    disablePump();
-    setArduinoPumpState(NO_ERRORS_STATE);
-  } else {
-    bool arduinoPoolReachable = checkArduinoPoolLastConnection();
+  int systemState = getSystemState();
+  int rdSTrys = 1;
+  while (systemState < 0) {
+    delay(1500 * rdSTrys);
 
-    if (!arduinoPoolReachable) {
-      Serial.println("ArduinoPool not reachable. Disableing pump.");
+    systemState = getSystemState();
+    Serial.print("System state: ");
+    Serial.println(systemState);
+    if (systemState >= 0) break;
+    rdSTrys += 1;
+
+    if (rdSTrys > READ_SYSTEM_STATE_TRYS_MAX) {
+      Serial.println("'Read system state' max reached. Try reconnecting to Wifi...");
       disablePump();
-      setArduinoPumpState(TEMP_DATA_OUTDATED);
-    } else {
-      double poolTemp = getPoolTemperature();
-      double requestedTemp = getRequestedTemperature();
-
-      if (poolTemp <= -127.0 || requestedTemp <= -127.0) {
-        Serial.println("Failed reading temperatures from server.");
-        disablePump();
-        setArduinoPumpState(FAILED_READ_TEMP);
+      setArduinoPumpState(FAILED_READ_SYSTEM_STATE);
+      
+      if (reconnectToWifi() < 0) {
+        Serial.println("Failed reconnecting to Wifi!");
       } else {
-        controlPump(poolTemp, requestedTemp);
-        setArduinoPumpState(NO_ERRORS_STATE);
+        Serial.println("Reconnecting to Wifi sucessfull.");
+      }
+      break;
+    }
+  }
+
+  if (systemState >= 0) {
+    if (systemState == SYSTEM_STATE_OFF) {
+      Serial.println("Pool control is system-wide off.");
+      disablePump();
+      setArduinoPumpState(NO_ERRORS_STATE);
+    } else if (systemState == SYSTEM_STATE_NO_ERRORS) {
+      bool arduinoPoolReachable = checkArduinoPoolLastConnection();
+
+      if (!arduinoPoolReachable) {
+        Serial.println("ArduinoPool not reachable. Disableing pump.");
+        disablePump();
+        setArduinoPumpState(TEMP_DATA_OUTDATED);
+      } else {
+        double poolTemp = getPoolTemperature();
+        double requestedTemp = getRequestedTemperature();
+
+        if (poolTemp <= -127.0 || requestedTemp <= -127.0) {
+          Serial.println("Failed reading temperatures from server.");
+          disablePump();
+          setArduinoPumpState(FAILED_READ_TEMP);
+        } else {
+          controlPump(poolTemp, requestedTemp);
+          setArduinoPumpState(NO_ERRORS_STATE);
+        }
       }
     }
+    setLastConnection();
+    delay(HEARTBEAT_IN_MS);
   }
-
-  setLastConnection();
-  delay(HEARTBEAT_IN_MS);
 }
 
 void controlPump(double poolTemp, double requestedTemp) {

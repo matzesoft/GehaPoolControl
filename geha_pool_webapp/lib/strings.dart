@@ -36,6 +36,10 @@ class Strings {
       _STRINGS['failed_connecting_to_server']!;
   static String get failedConnectingToServerDueTimeout =>
       _STRINGS['failed_connecting_to_server_due_timeout']!;
+  static String get failedReadingSysStatePool =>
+      _STRINGS['failed_reading_sys_state_pool']!;
+  static String get failedReadingSysStatePump =>
+      _STRINGS['failed_reading_sys_state_pump']!;
   static String get tryAgain => _STRINGS['try_again']!;
 }
 
@@ -74,5 +78,9 @@ const _STRINGS = {
   "failed_connecting_to_server": "Verbindung mit Server fehlgeschlagen",
   "failed_connecting_to_server_due_timeout":
       "Zeitüberschreitung bei Verbindung mit Server",
+  "failed_reading_sys_state_pool":
+      "Da der System-Status nicht gelesen werden kann, wird die Temperatur nicht aktualisiert.",
+  "failed_reading_sys_state_pump":
+      "Da der System-Status nicht gelesen werden kann, wurde die Pumpe deaktiviert.",
   "try_again": "Erneut versuchen"
 };
