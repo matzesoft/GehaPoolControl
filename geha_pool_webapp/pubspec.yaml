@@ -1,5 +1,5 @@
 name: geha_pool_webapp
-description: A new Flutter project.
+description: WebApp to control the temperature of a pool.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
