@@ -14,7 +14,7 @@ class Strings {
   static String get requestedTemperature => _STRINGS['requested_temperature']!;
   static String get noRequestedTemperature =>
       _STRINGS['no_requested_temperature']!;
-  static String get changeTemperature => _STRINGS['change_temperature']!;
+  static String get change => _STRINGS['change']!;
   static String get logIn => _STRINGS['log_in']!;
   static String get email => _STRINGS['email']!;
   static String get password => _STRINGS['password']!;
@@ -41,6 +41,7 @@ class Strings {
   static String get failedReadingSysStatePump =>
       _STRINGS['failed_reading_sys_state_pump']!;
   static String get tryAgain => _STRINGS['try_again']!;
+  static String get manualMode => _STRINGS['manual_mode']!;
 }
 
 const _STRINGS = {
@@ -55,7 +56,7 @@ const _STRINGS = {
   "system_is_in_maintenance": "Das System ist in Wartung.",
   "requested_temperature": "Wunschtemperatur",
   "no_requested_temperature": "Keine Wunschtemperatur festgelegt.",
-  "change_temperature": "Temperatur ändern",
+  "change": "Ändern",
   "log_in": "Anmelden",
   "email": "E-Mail:",
   "password": "Passwort:",
@@ -82,5 +83,6 @@ const _STRINGS = {
       "Da der System-Status nicht gelesen werden kann, wird die Temperatur nicht aktualisiert.",
   "failed_reading_sys_state_pump":
       "Da der System-Status nicht gelesen werden kann, wurde die Pumpe deaktiviert.",
-  "try_again": "Erneut versuchen"
+  "try_again": "Erneut versuchen",
+  "manual_mode": "Manueller Modus",
 };

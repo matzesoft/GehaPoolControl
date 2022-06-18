@@ -50,7 +50,7 @@ void loop() {
       Serial.println("'Read system state' max reached. Try reconnecting to Wifi...");
       disablePump();
       setArduinoPumpState(FAILED_READ_SYSTEM_STATE);
-      
+
       if (reconnectToWifi() < 0) {
         Serial.println("Failed reconnecting to Wifi!");
       } else {
@@ -65,24 +65,36 @@ void loop() {
       Serial.println("Pool control is system-wide off.");
       disablePump();
       setArduinoPumpState(NO_ERRORS_STATE);
-    } else if (systemState == SYSTEM_STATE_NO_ERRORS) {
-      bool arduinoPoolReachable = checkArduinoPoolLastConnection();
+    } else {
 
-      if (!arduinoPoolReachable) {
-        Serial.println("ArduinoPool not reachable. Disableing pump.");
+      int mode = getControlMode();
+      Serial.print("Control mode: ");
+      Serial.println(mode);
+      if (mode == CONTROL_MODE_ALWAYS_ON) {
+        activatePump();
+        setArduinoPumpState(NO_ERRORS_STATE);
+      } else if (mode == CONTROL_MODE_ALWAYS_OFF) {
         disablePump();
-        setArduinoPumpState(TEMP_DATA_OUTDATED);
+        setArduinoPumpState(NO_ERRORS_STATE);
       } else {
-        double poolTemp = getPoolTemperature();
-        double requestedTemp = getRequestedTemperature();
 
-        if (poolTemp <= -127.0 || requestedTemp <= -127.0) {
-          Serial.println("Failed reading temperatures from server.");
+        bool arduinoPoolReachable = checkArduinoPoolLastConnection();
+        if (!arduinoPoolReachable) {
+          Serial.println("ArduinoPool not reachable. Disableing pump.");
           disablePump();
-          setArduinoPumpState(FAILED_READ_TEMP);
+          setArduinoPumpState(TEMP_DATA_OUTDATED);
         } else {
-          controlPump(poolTemp, requestedTemp);
-          setArduinoPumpState(NO_ERRORS_STATE);
+          double poolTemp = getPoolTemperature();
+          double requestedTemp = getRequestedTemperature();
+
+          if (poolTemp <= -127.0 || requestedTemp <= -127.0) {
+            Serial.println("Failed reading temperatures from server.");
+            disablePump();
+            setArduinoPumpState(FAILED_READ_TEMP);
+          } else {
+            controlPump(poolTemp, requestedTemp);
+            setArduinoPumpState(NO_ERRORS_STATE);
+          }
         }
       }
     }

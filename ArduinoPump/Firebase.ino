@@ -45,6 +45,10 @@ double getRequestedTemperature(void) {
   return getTemperatureFromFB(requestedTemperaturePath + "temperature", -127.0);
 }
 
+int getControlMode(void) {
+  return getIntFromFB(requestedTemperaturePath + "control-mode", -1);
+}
+
 unsigned long long getArduinoPoolLastConnection(void) {
   return getTimestampFromFB(arduinoPoolPath + "last-connection");
 }

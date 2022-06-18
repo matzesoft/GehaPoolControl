@@ -228,15 +228,23 @@ class PumpData {
 }
 
 const _REQTEMP_LAST_UPDATE_KEY = "last-update";
+const _REQTEMP_CONTROL_MODE_KEY = "control-mode";
 const _REQTEMP_TEMPERATURE_KEY = "temperature";
 const _REQTEMP_UPDATE_UID_KEY = "update-uid";
 
 const MIN_TEMP = 0;
 const MAX_TEMP = 40;
 
-/// Temperature the requested temp is set to, when user wants to disable the pump.
-/// Should be way under normal temperature values.
-const _PUMP_DISABLED_TEMP = -100;
+enum ControlMode {
+  automatic,
+  alwaysOn,
+  alwaysOff,
+}
+
+ControlMode _controlModeByInt(int? state) {
+  if (state == null) return ControlMode.automatic;
+  return ControlMode.values[state];
+}
 
 class ReqTempData {
   ReqTempData(this._dbRef);
@@ -244,36 +252,65 @@ class ReqTempData {
   DatabaseReference _dbRef;
   int? _lastUpdate;
   int? _temperature;
+  int? _controlMode;
 
   DateTime? get lastUpdate => _dateTimeByIntTimestamp(_lastUpdate);
   String? get lastUpdateFormatted => _dateTimeFormatted(lastUpdate);
   int? get temperature => _temperature;
+  ControlMode get controlMode => _controlModeByInt(_controlMode);
+
+  @deprecated
   bool? get active => temperature != null ? temperature! >= MIN_TEMP : null;
 
   void _setFromJSON(Map<String, dynamic> json) {
-    _lastUpdate = json[_ARPUMP_LAST_UPDATE_KEY];
+    _lastUpdate = json[_REQTEMP_LAST_UPDATE_KEY];
     _temperature = json[_REQTEMP_TEMPERATURE_KEY];
+    _controlMode = json[_REQTEMP_CONTROL_MODE_KEY];
   }
 
   Future<bool> setTemperature(UserProvider users, int temperature) async {
     if (!users.isSignedIn) {
-      throw StateError("Temperature can only be changed when logged in.");
+      print("Temperature can only be changed when logged in.");
+      return false;
     }
     if (temperature > MAX_TEMP) {
-      throw ArgumentError("Requested temperature must be <= $MAX_TEMP.");
+      print("Requested temperature must be <= $MAX_TEMP.");
+      return false;
     }
     if (temperature < MIN_TEMP) {
-      temperature = _PUMP_DISABLED_TEMP;
+      print("Requested temperature must be >= $MIN_TEMP.");
+      return false;
     }
 
     try {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       await _dbRef.update({
         _REQTEMP_LAST_UPDATE_KEY: timestamp,
+        _REQTEMP_CONTROL_MODE_KEY: ControlMode.automatic.index,
         _REQTEMP_TEMPERATURE_KEY: temperature,
         _REQTEMP_UPDATE_UID_KEY: users.user!.uid,
       });
     } catch (_) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> setControlMode(UserProvider users, ControlMode mode) async {
+    if (!users.isSignedIn) {
+      print("Control mode can only be changed when logged in.");
+      return false;
+    }
+
+    try {
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      await _dbRef.update({
+        _REQTEMP_LAST_UPDATE_KEY: timestamp,
+        _REQTEMP_CONTROL_MODE_KEY: mode.index,
+        _REQTEMP_UPDATE_UID_KEY: users.user!.uid,
+      });
+    } catch (_) {
+      print(_);
       return false;
     }
     return true;
@@ -287,6 +324,8 @@ class ReqTempData {
       _lastUpdate = value;
     } else if (key == _REQTEMP_TEMPERATURE_KEY) {
       _temperature = value;
+    } else if (key == _REQTEMP_CONTROL_MODE_KEY) {
+      _controlMode = value;
     }
   }
 }

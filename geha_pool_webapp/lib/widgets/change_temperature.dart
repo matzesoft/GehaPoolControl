@@ -32,17 +32,41 @@ class ChangeTemperatureDialog extends StatefulWidget {
 }
 
 class _ChangeTemperatureDialogState extends State<ChangeTemperatureDialog> {
-  int? temperature;
+  static const controlModeOffPoint = (MIN_TEMP - 1);
+  static const controlModeOnPoint = (MAX_TEMP + 1);
+
+  int? sliderPoint;
   bool failedUpdating = false;
 
-  void updateTemperature(ReqTempData reqTemp) async {
-    if (temperature != null) {
-      if (await reqTemp.setTemperature(widget.userProvider, temperature!)) {
-        Navigator.pop(context);
+  void updateReqTemperature(ReqTempData reqTemp) async {
+    if (sliderPoint != null) {
+      final mode = controlModeBySliderPoint;
+      if (mode == ControlMode.automatic) {
+        if (await reqTemp.setTemperature(widget.userProvider, sliderPoint!)) {
+          Navigator.pop(context);
+        } else {
+          setState(() => failedUpdating = true);
+        }
       } else {
-        setState(() => failedUpdating = true);
+        if (await reqTemp.setControlMode(widget.userProvider, mode)) {
+          Navigator.pop(context);
+        } else {
+          setState(() => failedUpdating = true);
+        }
       }
     }
+  }
+
+  ControlMode get controlModeBySliderPoint {
+    if (this.sliderPoint! >= controlModeOnPoint) return ControlMode.alwaysOn;
+    if (this.sliderPoint! <= controlModeOffPoint) return ControlMode.alwaysOff;
+    return ControlMode.automatic;
+  }
+
+  String get temperatureText {
+    if (controlModeBySliderPoint == ControlMode.alwaysOn) return "ON";
+    if (controlModeBySliderPoint == ControlMode.alwaysOff) return "OFF";
+    return "$sliderPoint°C";
   }
 
   @override
@@ -50,13 +74,15 @@ class _ChangeTemperatureDialogState extends State<ChangeTemperatureDialog> {
     return Consumer<DbProvider>(
       builder: (context, dbProvider, child) {
         final reqTemp = dbProvider.reqTempData;
-        if (temperature == null) {
-          if (reqTemp.temperature == null) {
-            temperature = 20;
-          } else {
-            reqTemp.active!
-                ? temperature = reqTemp.temperature
-                : temperature = (MIN_TEMP - 1);
+        if (sliderPoint == null) {
+          if (reqTemp.controlMode == ControlMode.alwaysOff) {
+            sliderPoint = controlModeOffPoint;
+          } else if (reqTemp.controlMode == ControlMode.alwaysOn) {
+            sliderPoint = controlModeOnPoint;
+          } else if (reqTemp.controlMode == ControlMode.automatic) {
+            reqTemp.temperature == null
+                ? sliderPoint = 20
+                : sliderPoint = reqTemp.temperature;
           }
         }
 
@@ -68,17 +94,17 @@ class _ChangeTemperatureDialogState extends State<ChangeTemperatureDialog> {
               Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: Text(
-                  this.temperature! >= MIN_TEMP ? "$temperature°C" : "OFF",
+                  temperatureText,
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ),
               Slider(
-                value: temperature!.toDouble(),
+                value: sliderPoint!.toDouble(),
                 onChanged: (newTemp) {
-                  setState(() => temperature = newTemp.round());
+                  setState(() => sliderPoint = newTemp.round());
                 },
                 min: (MIN_TEMP - 1).toDouble(),
-                max: MAX_TEMP.toDouble(),
+                max: (MAX_TEMP + 1).toDouble(),
               ),
               Text(
                 Strings.setRequestedTemperature,
@@ -107,7 +133,7 @@ class _ChangeTemperatureDialogState extends State<ChangeTemperatureDialog> {
               child: Text(Strings.cancel),
             ),
             TextButton(
-              onPressed: () => updateTemperature(reqTemp),
+              onPressed: () => updateReqTemperature(reqTemp),
               child: Text(Strings.save),
             ),
           ],

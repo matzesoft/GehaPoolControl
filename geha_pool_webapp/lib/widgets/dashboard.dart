@@ -125,13 +125,15 @@ class ReqTemp extends StatelessWidget {
   final ReqTempData reqTemp;
 
   String get tempText {
-    if (reqTemp.temperature == null) {
-      return Strings.noRequestedTemperature;
-    }
-    if (!reqTemp.active!) {
-      return "< 0°C";
-    }
+    if (reqTemp.temperature == null) return Strings.noRequestedTemperature;
+    if (reqTemp.controlMode == ControlMode.alwaysOff) return "OFF";
+    if (reqTemp.controlMode == ControlMode.alwaysOn) return "ON";
     return "${reqTemp.temperature}°C";
+  }
+
+  String get subtitleTempText {
+    if (reqTemp.controlMode != ControlMode.automatic) return Strings.manualMode;
+    return Strings.requestedTemperature;
   }
 
   void changeTemperature(BuildContext context) {
@@ -158,7 +160,7 @@ class ReqTemp extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 2.0, bottom: 6.0),
               child: Text(
-                Strings.requestedTemperature,
+                subtitleTempText,
                 style: Theme.of(context).textTheme.bodyText1,
                 textAlign: TextAlign.center,
               ),
@@ -167,7 +169,7 @@ class ReqTemp extends StatelessWidget {
               padding: const EdgeInsets.only(top: 6.0, bottom: 12.0),
               child: MaterialButton(
                 onPressed: () => changeTemperature(context),
-                child: Text(Strings.changeTemperature),
+                child: Text(Strings.change),
                 textColor: Colors.blue,
               ),
             ),

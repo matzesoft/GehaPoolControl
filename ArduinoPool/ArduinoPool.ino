@@ -59,7 +59,7 @@ void loop() {
     if (systemState == SYSTEM_STATE_OFF) {
       Serial.println("Pool control is deactivated by server.");
       setArduinoPoolState(NO_ERRORS_STATE);
-    } else if (systemState == SYSTEM_STATE_NO_ERRORS) {
+    } else {
       for (int i = 0; i < 5; i++) {
         float temp = getTempInC();
         if ((temp > TEMP_UNABLE_LOW) && (temp < TEMP_UNABLE_HIGH)) {
